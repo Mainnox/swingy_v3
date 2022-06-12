@@ -1,0 +1,4 @@
+Mainox The True God,9999,9999,9999,99,0,god
+Astaroth Big Arms,100,15,5,1,0,berserker
+Unbreakable Beber,150,5,15,1,0,warrior
+Annoying Gaytan,10,0,1,1,0,victime
