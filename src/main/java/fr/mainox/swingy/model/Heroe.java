@@ -1,8 +1,15 @@
 package fr.mainox.swingy.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class Heroe extends Creature {
 
+    int id;
+    @NotNull
+    @Size(min = 1)
     private int level;
+    @Size(min = 0)
     private int experience;
     private int maxHP;
     private String spe;
@@ -15,10 +22,18 @@ public class Heroe extends Creature {
         this.spe = spe;
         this.level = level;
         this.experience = experience;
-        this.weapon = "";
-        this.armor = "";
-        this.helm = "";
+        this.weapon = "none";
+        this.armor = "none";
+        this.helm = "none";
         this.maxHP = hp;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getLevel() {

@@ -15,7 +15,7 @@ public class ControlerGame {
         this.viewGame = viewGame;
     }
 
-    public void startGame() {
+    public Heroe startGame() {
         Creature creature;
         viewGame.printMap(modelGame.getMap());
         viewGame.printHeroInfo(modelGame.getHeroe());
@@ -49,7 +49,7 @@ public class ControlerGame {
             if (creature == modelGame.getHeroe()) {
                 viewGame.printWinGame();
                 modelGame.winGame();
-                break ;
+                return modelGame.getHeroe();
             }
             if (creature != null)
                 startFight(modelGame.getHeroe(), creature);
@@ -64,6 +64,7 @@ public class ControlerGame {
             }
             viewGame.printMap(modelGame.getMap());
         }
+        return null;
     }
 
     public void startFight(Heroe heroe, Creature creature) {

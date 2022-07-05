@@ -17,19 +17,59 @@
   </properties>
 
   <dependencies>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.hibernate.validator</groupId>
-      <artifactId>hibernate-validator</artifactId>
-      <version>7.0.4.Final</version>
-   </dependency>
-  </dependencies>
 
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.3.1</version>
+  </dependency>
+
+  <dependency>
+    <groupId>org.xerial</groupId>
+    <artifactId>sqlite-jdbc</artifactId>
+    <version>3.36.0.3</version>
+</dependency>
+
+<dependency>
+  <groupId>org.hibernate</groupId>
+  <artifactId>hibernate-core</artifactId>
+  <version>6.1.0.Final</version>
+  <type>pom</type>
+</dependency>
+
+<dependency>
+  <groupId>javax.el</groupId>
+  <artifactId>javax.el-api</artifactId>
+  <version>2.2.4</version>
+</dependency>
+<dependency>
+  <groupId>org.glassfish.web</groupId>
+  <artifactId>javax.el</artifactId>
+  <version>2.2.4</version>
+</dependency>
+
+<dependency>
+  <groupId>org.projectlombok</groupId>
+  <artifactId>lombok</artifactId>
+  <version>1.18.24</version>
+  <scope>provided</scope>
+</dependency>
+
+<dependency>
+  <groupId>javax.validation</groupId>
+  <artifactId>validation-api</artifactId>
+  <version>1.0.0.GA</version>
+</dependency>
+
+  </dependencies>
+  
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
@@ -51,19 +91,42 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.1</version>
         </plugin>
-        <plugin>  
-          <!-- Build an executable JAR -->  
-          <groupId>org.apache.maven.plugins</groupId>  
-          <artifactId>maven-jar-plugin</artifactId>  
-          <version>3.1.0</version>  
-          <configuration>  
-              <archive>  
-                  <manifest>  
-                      <mainClass>fr.mainox.swingy.App</mainClass>  
-                  </manifest>  
-              </archive>  
-          </configuration>  
-        </plugin> 
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <executions>
+              <execution>
+                  <id>copy-dependencies</id>
+                  <phase>prepare-package</phase>
+                  <goals>
+                      <goal>copy-dependencies</goal>
+                  </goals>
+                  <configuration>
+                      <outputDirectory>
+                          ${project.build.directory}/dependency
+                      </outputDirectory>
+                  </configuration>
+              </execution>
+          </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+            <archive>
+                <manifest>
+                    <addClasspath>true</addClasspath>
+                    <classpathPrefix>dependency/</classpathPrefix>
+                    <mainClass>
+                        fr.mainox.swingy.App
+                    </mainClass>
+                </manifest>
+            </archive>
+        </configuration>
+    </plugin>
+
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
           <version>2.5.2</version>

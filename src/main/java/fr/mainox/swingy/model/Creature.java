@@ -1,10 +1,16 @@
 package fr.mainox.swingy.model;
 
+import javax.validation.constraints.NotNull;
+
 public class Creature {
     
+    @NotNull
     private String name;
+    @NotNull
     private int hp;
+    @NotNull
     private int attack;
+    @NotNull
     private int defense;
     private int x;
     private int y;

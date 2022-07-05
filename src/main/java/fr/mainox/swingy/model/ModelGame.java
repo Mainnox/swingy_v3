@@ -1,13 +1,8 @@
 package fr.mainox.swingy.model;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class ModelGame {
     
@@ -193,49 +188,6 @@ public class ModelGame {
 
     public void winGame() {
         rest();
-        try (FileWriter fileWriter = new FileWriter("heroes.txt")) {
-            List<Heroe> heroeList = new ArrayList<Heroe>();
-            File file = new File("heroes.txt");
-            Scanner scanner = new Scanner(file);
-            StringBuilder sb = new StringBuilder();
-            while (scanner.hasNextLine()) {
-                sb.append(scanner.nextLine());
-            }
-            scanner.close();
-            String[] lines = sb.toString().split("\n");
-            for (String h : lines) {
-                String[] splitHero = h.split(" ");
-                heroeList.add(new Heroe(splitHero[0], Integer.parseInt(splitHero[1]),
-                    Integer.parseInt(splitHero[2]), Integer.parseInt(splitHero[3]),
-                    Integer.parseInt(splitHero[4]), Integer.parseInt(splitHero[5]),
-                    splitHero[6]));
-            }
-            for (Heroe heroSave : heroeList) {
-                if (heroSave.getName().equals(heroe.getName())) {
-                    heroSave.setLevel(heroe.getLevel());
-                    heroSave.setExperience(heroe.getExperience());
-                    heroSave.setHp(heroe.getHp());
-                    heroSave.setMaxHP(heroe.getMaxHP());
-                    heroSave.setAttack(heroe.getAttack());
-                    heroSave.setDefense(heroe.getDefense());
-                    heroSave.setWeapon(heroe.getWeapon());
-                    heroSave.setArmor(heroe.getArmor());
-                    heroSave.setHelm(heroe.getHelm());
-                }
-                fileWriter.write(heroSave.getName() + "," + heroSave.getLevel() + "," + heroSave.getExperience()
-                    + "," + heroSave.getHp() + "," + heroSave.getMaxHP() + "," + heroSave.getAttack() + "," + heroSave.getDefense() + ","
-                    + heroSave.getWeapon() + "," + heroSave.getArmor() + "," + heroSave.getHelm() + "\n");
-            }
-
-        }
-        catch (FileNotFoundException e) {
-            System.out.println("File not found");
-        }
-        catch (IOException e) {
-            System.out.println("IOException");
-        }
-        finally {
-            System.out.println("Game over");
-        }
+        heroe.addExperience(1000);
     }
 }
