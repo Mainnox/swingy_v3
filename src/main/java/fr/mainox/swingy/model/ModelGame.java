@@ -61,7 +61,7 @@ public class ModelGame {
         heroe.setX(mapSize / 2);  
         heroe.setY(mapSize / 2);
         map[mapSize / 2][mapSize / 2] = 1;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < mapSize * 1.5; i++) {
             while (true) {
                 int x = random.nextInt(mapSize);
                 int y = random.nextInt(mapSize);
@@ -72,6 +72,10 @@ public class ModelGame {
                 }
             }
         }
+    }
+
+    public SecureRandom getRandom() {
+        return random;
     }
 
     public Creature getCreature(int x, int y) {
@@ -176,10 +180,32 @@ public class ModelGame {
         return null;
     }
 
-    public void fightWin(Creature creature) {
+    public Artefact fightWin(Creature creature) {
+        int loot = random.nextInt(10);
+        Artefact artefact = null;
+
         map[creature.getX()][creature.getY()] = 0;
         listCreatures.remove(creature);
+        if (loot >= 0) {
+            int piece = random.nextInt(3);
+            int power = random.nextInt(6) + 1;
+
+            switch (piece) {
+                case 0:
+                    artefact = new Artefact("Sword +" + power, power, "Weapon");
+                    break ;
+                case 1:
+                    artefact = new Artefact("BodyArmor +" + power, power, "Armor");
+                    break ;
+                case 2:
+                    artefact = new Artefact("Helmet +" + power, power, "Helmet");
+                    break ;
+                default:
+                    break ;
+            }
+        }
         heroe.addExperience(100);
+        return artefact;
     }
 
     public void rest() {

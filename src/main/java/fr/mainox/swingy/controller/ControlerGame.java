@@ -1,5 +1,6 @@
 package fr.mainox.swingy.controller;
 
+import fr.mainox.swingy.model.Artefact;
 import fr.mainox.swingy.model.Creature;
 import fr.mainox.swingy.model.Heroe;
 import fr.mainox.swingy.model.ModelGame;
@@ -21,26 +22,31 @@ public class ControlerGame {
         viewGame.printHeroInfo(modelGame.getHeroe());
         while (true) {
             creature = null;
-            System.out.println("Where do you want to go?" + ((modelGame.getHeroe().getLevel() - 1) * 5) + 10);
+            System.out.println("Where do you want to go?");
             viewGame.printSelectAction();
             viewGame.printHeroePos(modelGame.getHeroe());
+            System.out.println(modelGame.getHeroe().getInfo());
             String action = System.console().readLine();
             if (action.equals("w")) {
-                if (modelGame.getHeroe().getX() == 0)
-                    winGame();
-                creature = modelGame.moveHero(0);
+                if (modelGame.getHeroe().getX() == 0) {
+                    creature = modelGame.getHeroe();
+                } else
+                    creature = modelGame.moveHero(0);
             } else if (action.equals("a")) {
-                if (modelGame.getHeroe().getY() == 0)
-                    winGame();
-                creature = modelGame.moveHero(1);
+                if (modelGame.getHeroe().getY() == 0){
+                    creature = modelGame.getHeroe();
+                } else
+                    creature = modelGame.moveHero(1);
             } else if (action.equals("s")) {
-                if (modelGame.getHeroe().getX() == modelGame.getMapSize())
-                    winGame();
-                creature = modelGame.moveHero(2);
+                if (modelGame.getHeroe().getX() == modelGame.getMapSize()){
+                    creature = modelGame.getHeroe();
+                } else
+                    creature = modelGame.moveHero(2);
             } else if (action.equals("d")) {
-                if (modelGame.getHeroe().getY() == modelGame.getMapSize())
-                    winGame();
-                creature = modelGame.moveHero(3);
+                if (modelGame.getHeroe().getY() == modelGame.getMapSize()){
+                    creature = modelGame.getHeroe();
+                } else
+                    creature = modelGame.moveHero(3);
             } else if (action.equals("r")) {
                 viewGame.printRest(modelGame.getHeroe());
                 modelGame.rest();
@@ -85,12 +91,48 @@ public class ControlerGame {
             if (creature.getHp() <= 0) {
                 viewGame.printCreatureDead(creature);
                 modelGame.getListCreatures().remove(creature);
-                modelGame.fightWin(creature);
+                Artefact artefact = modelGame.fightWin(creature);
+                if (artefact != null)
+                    artefactLooted(artefact);
                 viewGame.printWin(100);
                 break;
             }
             viewGame.printAttack(creature, creature.getAttack() - heroe.getDefense());
             creature.attack(heroe);
+        }
+    }
+
+    public void artefactLooted(Artefact artefact) {
+        viewGame.printArtefactLooted(artefact);
+        while (true) {
+            String action = System.console().readLine();
+            if (action.equals("a")) {
+                switch (artefact.getType()) {
+                    case "Weapon":
+                        if (modelGame.getHeroe().getWeapon().equals("none"))
+                            modelGame.getHeroe().addWeapon(artefact.getName());
+                        else
+                            modelGame.getHeroe().changeWeapon(artefact.getName());
+                        break;
+                    case "Armor":
+                        if (modelGame.getHeroe().getArmor().equals("none"))
+                            modelGame.getHeroe().addArmor(artefact.getName());
+                        else
+                            modelGame.getHeroe().changeArmor(artefact.getName());
+                        break;
+                    case "Helmet":
+                        if (modelGame.getHeroe().getHelm().equals("none"))
+                            modelGame.getHeroe().addHelm(artefact.getName());
+                        else
+                            modelGame.getHeroe().changeHelm(artefact.getName());
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            }
+            else if (action.equals("q"))
+                break;
         }
     }
 

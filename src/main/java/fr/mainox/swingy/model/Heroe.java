@@ -1,15 +1,9 @@
 package fr.mainox.swingy.model;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 public class Heroe extends Creature {
 
     int id;
-    @NotNull
-    @Size(min = 1)
     private int level;
-    @Size(min = 0)
     private int experience;
     private int maxHP;
     private String spe;
@@ -63,25 +57,55 @@ public class Heroe extends Creature {
     public String getWeapon() {
         return weapon;
     }
-
-    public void setWeapon(String weapon) {
-        this.weapon = weapon;
-    }
-
+    
     public String getArmor() {
         return armor;
-    }
-
-    public void setArmor(String armor) {
-        this.armor = armor;
     }
 
     public String getHelm() {
         return helm;
     }
 
+    public void setArmor(String armor) {
+        this.armor = armor;
+    }
+
     public void setHelm(String helm) {
         this.helm = helm;
+    }
+
+    public void setWeapon(String weapon) {
+        this.weapon = weapon;
+    }
+    
+    public void addWeapon(String weapon) {
+        String[] weaponSplit = weapon.split(" ");
+        if (weaponSplit[0].equals("none")) {
+            this.weapon = "none";
+        } else {
+            this.weapon = weapon;
+            this.attack += Integer.parseInt(weaponSplit[1]);
+        }
+    }
+
+    public void addArmor(String armor) {
+        String[] armorSplit = armor.split(" ");
+        if (armorSplit[0].equals("none")) {
+            this.armor = "none";
+        } else {
+            this.armor = armor;
+            this.defense += Integer.parseInt(armorSplit[1]);
+        }
+    }
+    
+    public void addHelm(String helm) {
+        String[] split = helm.split(" ");
+        if (split[0].equals("none")) {
+            this.helm = "none";
+        } else {
+            this.helm = helm;
+            this.maxHP += Integer.parseInt(split[1]) * 10;
+        }
     }
 
     public int getMaxHP() {
@@ -96,6 +120,7 @@ public class Heroe extends Creature {
         this.setLevel(this.getLevel() + 1);
         this.setExperience(0);
         this.setMaxHP(this.getMaxHP() + 10);
+        this.setHp(this.getMaxHP());
         this.setAttack(this.getAttack() + 1);
         this.setDefense(this.getDefense() + 1);
     }
@@ -106,19 +131,38 @@ public class Heroe extends Creature {
             this.levelUp();
     }
 
-    public void addWeapon(String weapon, int attack) {
-        this.setWeapon(weapon);
-        this.setAttack(this.getAttack() + attack);
+    public void addArtefact(Artefact artefact) {
+        if (artefact.getType().equals("Weapon")) {
+            if (this.weapon.equals("none"))
+                this.addWeapon(artefact.getName());
+            else
+                this.changeWeapon(artefact.getName());
+        } else if (artefact.getType().equals("Armor")) {
+            if (this.armor.equals("none"))
+                this.addArmor(artefact.getName());
+            else
+                this.changeArmor(artefact.getName());
+        } else if (artefact.getType().equals("Helmet")) {
+            if (this.helm.equals("none"))
+                this.addHelm(artefact.getName());
+            else
+                this.changeHelm(artefact.getName());
+        }
     }
 
-    public void addArmor(String armor, int defense) {
-        this.setArmor(armor);
-        this.setDefense(this.getDefense() + defense);
+    public void changeWeapon(String weapon) {
+        this.attack -= Integer.parseInt(this.weapon.split(" ")[1]);
+        this.addWeapon(weapon);
     }
 
-    public void addHelm(String helm, int hp) {
-        this.setHelm(helm);
-        this.setHp(this.getHp() + hp);
+    public void changeArmor(String armor) {
+        this.defense -= Integer.parseInt(this.armor.split(" ")[1]);
+        this.addArmor(armor);
+    }
+
+    public void changeHelm(String helm) {
+        this.maxHP -= Integer.parseInt(this.helm.split(" ")[1]) * 10;
+        this.addHelm(helm);
     }
 
     public void kill() {

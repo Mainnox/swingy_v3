@@ -1,17 +1,27 @@
 package fr.mainox.swingy.model;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class Creature {
     
     @NotNull
-    private String name;
+    @Size(min = 1, max = 20)
+    protected String name;
     @NotNull
-    private int hp;
+    @Min(100)
+    @Max(1000)
+    protected int hp;
     @NotNull
-    private int attack;
+    @Min(10)
+    @Max(15)
+    protected int attack;
     @NotNull
-    private int defense;
+    @Min(10)
+    @Max(15)
+    protected int defense;
     private int x;
     private int y;
 
@@ -77,7 +87,10 @@ public class Creature {
     }
 
     public void attack(Creature creature) {
-        creature.setHp(creature.getHp() - (this.getAttack() - creature.getDefense()));
+        int damage = this.getAttack() - creature.getDefense();
+        if (damage < 0)
+            damage = 1;
+        creature.setHp(creature.getHp() - damage);
     }
 
 }

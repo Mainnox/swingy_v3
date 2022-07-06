@@ -22,13 +22,17 @@ public class ViewConsole implements ViewSelection {
     public void printSelectionHeroes(List<Heroe> heroes) {
         System.out.println("Select a heroe:");
         printListHeroes(heroes);
-        System.out.println("- exit: Back");
         System.out.println("- new: Create a new heroe");
+        System.out.print("- switch: Switch mode");
+        System.out.println("- exit: Back");
     }
 
     public void printSelectedHeroe(Heroe heroe) {
         System.out.println("Selected heroe:");
-        System.out.println("- name: " + heroe.getName() + "\n- hp: " + heroe.getHp() + "\n- attack: " + heroe.getAttack() + "\n- defense: " + heroe.getDefense() + "\n- level: " + heroe.getLevel() + "\n- xp: " + heroe.getExperience() + "\n- specialisation: " + heroe.getSpe());
+        System.out.println("- name: " + heroe.getName() + "\n- hp: " + heroe.getHp() + "\n- attack: "
+            + heroe.getAttack() + "\n- defense: " + heroe.getDefense() + "\n- level: " + heroe.getLevel() + "\n- xp: "
+            + heroe.getExperience() + "\n- specialisation: " + heroe.getSpe() + "\n- weapon: " + heroe.getWeapon()
+            + "\n- armor: " + heroe.getArmor() + "\n- helm: " + heroe.getHelm());
         System.out.println("- start: Start the game");
         System.out.println("- delete: Delete the heroe");
         System.out.println("- exit: Back");
@@ -48,10 +52,12 @@ public class ViewConsole implements ViewSelection {
             System.out.println("Enter your heroe's specialisation");
             String specialisation = br.readLine();
             return new Heroe(name, hp, attack, defense, 1, 0,  specialisation);
+        } catch (NumberFormatException e) {
+            System.out.println("Hp, Attack and Defense must be numbers");
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return null;
         }
+        return null;
     }
 
     public void printError(String error) {

@@ -18,6 +18,7 @@ public class ViewGuiSelection extends JPanel {
     private JButton buttonLoadHero = new JButton("Load Hero");
     private JButton buttonDeleteHero = new JButton("Delete Hero");
     private JButton buttonQuit = new JButton("Quit the game");
+    private JButton buttonSwitchMode = new JButton("Switch mode");
     private JList<String> listHero = new JList<>();
     private JTextArea textPaneHeroInformation = new JTextArea();
 
@@ -59,13 +60,15 @@ public class ViewGuiSelection extends JPanel {
         listHero.setFixedCellWidth(100);
         listHero.setFixedCellHeight(20);
         listHero.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listHero.setBackground(Color.BLACK);
+        listHero.setForeground(new Color(139, 0, 0));
 
         textPaneHeroInformation.setEditable(false);
         textPaneHeroInformation.setLineWrap(true);
         textPaneHeroInformation.setWrapStyleWord(true);
         textPaneHeroInformation.setText("");
-        textPaneHeroInformation.setBackground(Color.WHITE);
-        textPaneHeroInformation.setForeground(Color.BLACK);
+        textPaneHeroInformation.setBackground(Color.BLACK);
+        textPaneHeroInformation.setForeground(new Color(139, 0, 0));
         textPaneHeroInformation.setFont(new Font("Arial", Font.BOLD, 12));
 
         northPanel.add(labelTitle);
@@ -75,9 +78,10 @@ public class ViewGuiSelection extends JPanel {
         centerPanel.add(textPaneHeroInformation, addComponents(1, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
 
         southPanel.add(buttonCreateHero);
+        southPanel.add(buttonQuit);
         southPanel.add(buttonLoadHero);
         southPanel.add(buttonDeleteHero);
-        southPanel.add(buttonQuit);
+        southPanel.add(buttonSwitchMode);
 
         this.add(northPanel, BorderLayout.NORTH);
         this.add(centerPanel, BorderLayout.CENTER);
@@ -93,6 +97,16 @@ public class ViewGuiSelection extends JPanel {
         buttonLoadHero.addActionListener(listener);
         buttonDeleteHero.addActionListener(listener);
         buttonQuit.addActionListener(listener);
+        buttonSwitchMode.addActionListener(listener);
+    }
+
+    public void setEnabledSelection(boolean enabled) {
+        buttonDeleteHero.setEnabled(enabled);
+        buttonLoadHero.setEnabled(enabled);
+    }
+
+    public JButton getButtonSwitchMode() {
+        return buttonSwitchMode;
     }
 
     public JList<String> getListHero() {

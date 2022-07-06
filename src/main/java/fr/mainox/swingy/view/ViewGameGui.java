@@ -1,15 +1,23 @@
 package fr.mainox.swingy.view;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
+import fr.mainox.swingy.model.Artefact;
 import fr.mainox.swingy.model.Creature;
 import fr.mainox.swingy.model.Heroe;
 
+import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
+import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
+
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionListener;
@@ -17,10 +25,10 @@ import java.awt.event.ActionListener;
 public class ViewGameGui extends JPanel {
     
     private MainFrame mainFrame;
-    private JTextArea map = new JTextArea();
+    private JLabel map = new  JLabel("", SwingConstants.CENTER);
     private JTextArea heroeInformation = new JTextArea();
     private JTextArea enemyInformation = new JTextArea();
-    private JTextArea message = new JTextArea();
+    private JTextArea message = new JTextArea(6, 10);
     private JButton moveUp = new JButton("Up");
     private JButton moveDown = new JButton("Down");
     private JButton moveLeft = new JButton("Left");
@@ -30,12 +38,14 @@ public class ViewGameGui extends JPanel {
     private JButton attack = new JButton("Attack");
     private JButton quit = new JButton("Quit");
     private JButton escape = new JButton("Escape");
-    private JScrollPane scrollBar = new JScrollPane(message, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    private JScrollPane scrollPaneMessage = new JScrollPane(message, VERTICAL_SCROLLBAR_AS_NEEDED, HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    private String[] images = {"/darkalley.jpg", "/darkness.jpg", "/darkvoute.jpg", "/redalley.jpg", "/Sanctuaire.jpg", "/Monster.jpg"};
 
 
     public ViewGameGui(MainFrame mainFrame) {
         super(new BorderLayout());
         this.mainFrame = mainFrame;
+        this.setBackground(Color.BLACK);
         createGui();
     }
 
@@ -57,14 +67,21 @@ public class ViewGameGui extends JPanel {
         JPanel southJPanel = new JPanel(new BorderLayout());
         JPanel westJPanel = new JPanel(new GridBagLayout());
         JPanel subcenterPanel = new JPanel(new BorderLayout());
-        map.setEditable(false);
+
+        this.map.setIcon(new ImageIcon(getClass().getResource("/luminoushub.jpg")));
+
         heroeInformation.setEditable(false);
+        heroeInformation.setBackground(new Color(0, 0, 0));
+        heroeInformation.setForeground(new Color(139, 0, 0));
         enemyInformation.setEditable(false);
         message.setText("");
         message.setEditable(false);
         message.setWrapStyleWord(true);
         message.setLineWrap(true);
-        message.setMaximumSize(message.getSize());
+        message.setBackground(new Color(0, 0, 0));
+        message.setForeground(new Color(139, 0, 0));
+
+        setEnabledFight(false);
 
         centerJPanel.add(map, BorderLayout.CENTER);
 
@@ -75,7 +92,7 @@ public class ViewGameGui extends JPanel {
         westJPanel.add(moveDown, addComponents(1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
         westJPanel.add(moveRight, addComponents(2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
 
-        subcenterPanel.add(scrollBar, BorderLayout.CENTER);
+        subcenterPanel.add(scrollPaneMessage, BorderLayout.CENTER);
         subcenterPanel.add(attack, BorderLayout.NORTH);
         subcenterPanel.add(escape, BorderLayout.SOUTH);
 
@@ -103,13 +120,13 @@ public class ViewGameGui extends JPanel {
         return mainFrame;
     }
 
-    public void setMap(int[][] map) {
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
-                this.map.append(map[i][j] + " ");
-            }
-            this.map.append("\n");
-        }
+    public void setMap(int image) {
+        this.map.setIcon(new ImageIcon(getClass().getResource(this.images[image])));
+    }
+
+    public int artefactLooted(Artefact artefact) {
+        return JOptionPane.showConfirmDialog(mainFrame, "You have looted " + artefact.getName()
+            + ".\nDo you wanna equip it ?", "LOOT!", JOptionPane.YES_NO_OPTION);
     }
 
     public void fillMessage(String message) {
@@ -121,6 +138,7 @@ public class ViewGameGui extends JPanel {
     }
 
     public void startFight(Creature creature) {
+        this.map.setIcon(new ImageIcon(getClass().getResource(this.images[5])));
         this.message.append("You have encountered a " + creature.getName() + " !\n");
     }
 
@@ -129,11 +147,17 @@ public class ViewGameGui extends JPanel {
     }
 
     public void attack(int damage) {
+        if (damage <= 0)
+            damage = 1;
         this.message.append("You attacked the enemy and did " + damage + " damage.\n");
     }
 
     public void defend(int damage) {
         this.message.append("You defended and took " + damage + " damage.\n");
+    }
+
+    public void escape() {
+        this.message.append("You succesfully escape the fight.\nCoward !\n");
     }
 
     public void creatureInformation(Creature creature) {
@@ -150,6 +174,20 @@ public class ViewGameGui extends JPanel {
 
     public void setMessage(String message) {
         this.message.setText(message);
+    }
+
+    public void setEnabledFight(boolean enabled) {
+        attack.setEnabled(enabled);
+        escape.setEnabled(enabled);
+    }
+
+    public void setEnabledMovement(boolean enabled) {
+        moveUp.setEnabled(enabled);
+        moveDown.setEnabled(enabled);
+        moveLeft.setEnabled(enabled);
+        moveRight.setEnabled(enabled);
+        rest.setEnabled(enabled);
+        run.setEnabled(enabled);
     }
 
     public JButton getMoveUp() {
@@ -188,7 +226,7 @@ public class ViewGameGui extends JPanel {
         return escape;
     }
 
-    public JTextArea getMap() {
+    public JLabel getMap() {
         return map;
     }
 
@@ -202,6 +240,10 @@ public class ViewGameGui extends JPanel {
 
     public JTextArea getMessage() {
         return message;
+    }
+
+    public String[] getImages() {
+        return images;
     }
 
     

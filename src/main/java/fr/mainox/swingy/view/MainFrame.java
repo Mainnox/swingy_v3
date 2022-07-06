@@ -14,7 +14,9 @@ public class MainFrame extends JFrame {
 
     private void createGui() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setBackground(Color.BLACK);
         setMinimumSize(new Dimension(800, 600));
+        setLocationRelativeTo(null);
         contentPanel = new JPanel(new BorderLayout());
         add(contentPanel, BorderLayout.CENTER);
         pack();

@@ -1,5 +1,6 @@
 package fr.mainox.swingy.view;
 
+import fr.mainox.swingy.model.Artefact;
 import fr.mainox.swingy.model.Creature;
 import fr.mainox.swingy.model.Heroe;
 
@@ -48,7 +49,8 @@ public class ViewGame {
     }
 
     public void printSelectAction() {
-        System.out.println("Select an action:\nw - Move up\na - Move left\ns - Move down\nd - Move right\nq - Quit");
+        System.out.println("Select an action:\nw - Move up\na - Move left\ns - Move down\nd - Move right\nr - Rest\n q - Quit");
+        
     }
 
     public void printCreatureInfo(Creature creature) {
@@ -82,6 +84,10 @@ public class ViewGame {
 
     public void printHeroePos(Heroe heroe) {
         System.out.println("Your hero is at position " + heroe.getX() + "," + heroe.getY() + ".");
+    }
+
+    public void printArtefactLooted(Artefact artefact) {
+        System.out.println("You have looted an " + artefact.getName() + ".Enter 'a' to use it or 'q' to quit.");
     }
 
 }
